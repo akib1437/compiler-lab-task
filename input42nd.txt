@@ -1,0 +1,3 @@
+asdas = adsad + 23435 ;
+_asd = asdasd ;
+ad123 + ( a + b ) ;
