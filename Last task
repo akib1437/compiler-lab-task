@@ -1,0 +1,65 @@
+#include <iostream>
+#include <fstream>
+#include <string>
+using namespace std;
+
+// Helper: check if string only contains 'a' or 'b'
+bool allAB(const string& s) {
+    for (char c : s) {
+        if (c != 'a' && c != 'b') return false;
+    }
+    return true;
+}
+
+// (1) a(a+b)*
+bool lang1(const string& s) {
+    if (s.empty()) return false;        // must not be empty
+    if (s[0] != 'a') return false;      // must start with 'a'
+    return allAB(s);                    // only a/b allowed
+}
+
+// (2) a(a+b)* + b
+bool lang2(const string& s) {
+    if (s == "b") return true;          // special case: exactly "b"
+    return lang1(s);                    // otherwise must match lang1
+}
+
+// (3) a(a+b)* + b*
+bool lang3(const string& s) {
+    // check b*
+    bool onlyBs = true;
+    for (char c : s) {
+        if (c != 'b') { onlyBs = false; break; }
+    }
+    if (onlyBs) return true;            // accepts ε too (empty string)
+
+    // check lang1
+    return lang1(s);
+}
+
+int main() {
+    ifstream fin("input.txt"); // <-- your input file
+    if (!fin) {
+        cerr << "Error: Could not open input.txt\n";
+        return 1;
+    }
+
+    string s;
+    while (fin >> s) {  // reads word by word
+        cout << "String: " << s << "\n";
+        cout << "  Lang1: " << (lang1(s) ? "YES" : "NO") << "\n";
+        cout << "  Lang2: " << (lang2(s) ? "YES" : "NO") << "\n";
+        cout << "  Lang3: " << (lang3(s) ? "YES" : "NO") << "\n";
+    }
+
+    fin.close();
+    return 0;
+}
+
+abba
+b
+ab
+a
+bbb
+ba
+abc
